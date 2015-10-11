@@ -1,0 +1,68 @@
+<html>
+<head>
+	<title>Quiz</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-3.3.5-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../bootstrap-3.3.5-dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" type="text/css" href="quiz.css">
+</head>
+
+
+<body>
+	<div id="login">
+		<t1>Welcome!</t1><br><br>
+		<form id="getName"> 
+			<div class="form-group col-sm-6 col-sm-offset-3">
+				<label for="name" id="lName" class="control-label">What is your name?</label>
+				<input type="text" id="name" class="form-control" placeholder="Your Name...">
+			</div>
+		</form>
+		<div class="clearfix"></div>
+		<form id="firstBtn">
+			<input type="button" id="continue" class="btn btn-lg btn-default" value="Continue">
+		</form>
+	</div>
+	<div id="questions">
+		<t1 id="nameTitle"></t1><br>
+		<t2 id="quizTitle">It's a quiz!</t2><br>
+		<i id="quizDes">There are questions!</i>
+		<h1 id="quest">What is two plus two?</h1>
+		<h3 id="answ"></h3>
+		<form id="getAnswer">
+			<input type="radio" id="r0" name="answer">
+			<label id="lr0" for="r0"></label><br>
+			<input type="radio" id="r1" name="answer" >
+			<label id="lr1" for="r1"></label><br>
+			<input type="radio" id="r2" name="answer" >
+			<label id="lr2" for="r2"></label><br>
+			<input type="radio" id="r3" name="answer" >
+			<label id="lr3" for="r3"></label>
+		</form>
+		<form id="pageButtons">
+			<input type="button" id="back" class="btn btn-sm btn-default" value="Back">
+			<input type="button" id="forward" class="btn btn-sm btn-default" value="Next">
+			<label for="forward" id="lForward" class="label label-danger"></label>
+		</form>
+	</div>
+	<div id="fin">
+		<t1>All done!</t1><br>
+		<t2 id="score"></t2><br>
+		<h1 id="note"></h1><br>
+		<canvas id="right" width="200" height="200"></canvas>
+		<label id="lRight" class="label label-success" for="right">Tags for Right Answers</label>
+		<canvas id="wrong" width="200" height="200"></canvas>
+		<label id="lWrong" class="label label-danger" for="wrong">Tags for Wrong Answers</label><br><br>
+		<legend>&nbspLegend</legend>
+        <div id="leg">
+        </div>
+        <table id="viewAnsw" class="table table-bordered table-hover"></table><br><br>
+		<br>
+	</div>
+	<script src="../jquery-1.11.3.js"></script>
+	<script src="../bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+	<script src="questions1.js"></script>
+	<script src="quiz.js"></script>
+</body>
+
+
+</html>

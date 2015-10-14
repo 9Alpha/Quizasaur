@@ -1,0 +1,31 @@
+{
+  "name": "quiz",
+  "version": "0.1.1",
+  "description": "A dynamic quiz",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/9Alpha/Quizasaur.git"
+  },
+  "keywords": [
+    "quiz"
+  ],
+  "author": "Max Mitchell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/9Alpha/Quizasaur/issues"
+  },
+  "homepage": "https://github.com/9Alpha/Quizasaur#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "node": "0.0.0",
+    "python": "0.0.4"
+  },
+  "engines": {
+    "node": "0.12.2"
+  }
+}

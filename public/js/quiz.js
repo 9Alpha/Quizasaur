@@ -257,8 +257,11 @@ $('#quizDes').text(quiz.description);
 
 
 $('#continue').on('click', nameIsThere);
-$nameIn.on('submit', function() {
-	this.preventDefault();
+
+$nameIn.on('return', function(e) {
+    alert("Enter");
+	e.preventDefault();
+    nameIsThere();
 })
 $('#getAnswer').on('click', function() {
 	pageAnswered[currentPage] = false;

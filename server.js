@@ -20,8 +20,5 @@ app.get('/scores', function (req, res) {
 	res.send('Oop!!');
 });
 
-app.get('/index.html', function (req, res) {
-	res.send(content);
-});
 
 app.listen(process.env.PORT || 5000);

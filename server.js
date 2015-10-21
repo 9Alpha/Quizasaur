@@ -12,4 +12,16 @@ app.get('/', function (req, res) {
 	res.send(content);
 });
 
+app.get('/quiz', function (req, res) {
+	res.send('Ayp!!');
+});
+
+app.get('/scores', function (req, res) {
+	res.send('Oop!!');
+});
+
+app.get('/index.html', function (req, res) {
+	res.send(content);
+});
+
 app.listen(process.env.PORT || 5000);

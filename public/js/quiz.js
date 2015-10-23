@@ -2,6 +2,7 @@ var $loginPage, $questPage, $finPage, $nameIn;
 var userName, quizLen, currentPage, numCorrect; 
 var pageAnswered = [];
 var tags = [];
+var quiz;
 var answChoice = [];
 var answCorrect = [];
 var questChosen = true;
@@ -184,6 +185,37 @@ function nameIsThere() {
 }
 
 function toQuestions() {
+    
+    $.getJSON('public/js/questions1.json')
+    .done( function() {
+        quiz = json(data);  
+    }).fail( function() {
+     alert("did not work");   
+    });
+    
+    quizLen = quiz.questions.length;
+    for (var i = 0; i < quizLen; i++) {
+        var a = randomInt(0, quiz.questions.length - 1);
+        while (questChosen === true && questsToUse.length !== 0) {
+            for (var j = 0; j < questsToUse.length; j++) {
+                if (questsToUse[j] === a) {
+                    a = randomInt(0, quiz.questions.length - 1);
+                    break;
+                } else if (j === questsToUse.length-1) {
+                    questChosen = false;
+                }
+            }
+        } 
+        questsToUse.push(a);
+        console.log(questsToUse[i]);
+        questChosen = true;
+        pageAnswered.push(false);
+        answCorrect.push(false);
+    }
+    
+    $('#quizTitle').text("Welcome to the \""+quiz.title+"\"");
+    $('#quizDes').text(quiz.description);
+    
 	$loginPage.hide();
 	
 	userName = $nameIn.val();
@@ -224,25 +256,7 @@ function toLogin() {
 	$questPage.hide();
 }
 
-quizLen = quiz.questions.length;
-for (var i = 0; i < quizLen; i++) {
-	var a = randomInt(0, quiz.questions.length - 1);
-	while (questChosen === true && questsToUse.length !== 0) {
-		for (var j = 0; j < questsToUse.length; j++) {
-			if (questsToUse[j] === a) {
-				a = randomInt(0, quiz.questions.length - 1);
-				break;
-			} else if (j === questsToUse.length-1) {
-				questChosen = false;
-			}
-		}
-	} 
-	questsToUse.push(a);
-	console.log(questsToUse[i]);
-	questChosen = true;
-	pageAnswered.push(false);
-	answCorrect.push(false);
-}
+
 
 
 $nameIn = $('#name');
@@ -252,8 +266,7 @@ $finPage = $('#fin');
 $questPage.hide();
 $finPage.hide();
 $('#back').hide();
-$('#quizTitle').text("Welcome to the \""+quiz.title+"\"");
-$('#quizDes').text(quiz.description);
+
 
 
 $('#continue').on('click', nameIsThere);

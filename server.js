@@ -1,6 +1,8 @@
 var  express =  require('express');
 var  path =  require('path');
 
+var xhr = new XMLHttpRequest();
+
 var  app =  express();
 
 var fs = require("fs");

@@ -186,9 +186,9 @@ function nameIsThere() {
 
 function toQuestions() {
     
-    $.getJSON('public/js/questions1.json')
-    .done( function() {
-        quiz = json(data);  
+    $.getJSON('/Quiz')
+    .done( function(data) {
+        quiz = data;
     }).fail( function() {
      alert("did not work");   
     });

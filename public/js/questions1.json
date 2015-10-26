@@ -29,7 +29,7 @@
         "meta_tags":["Events"]
         },
         {
-        "text":"What was Gollum\'s name as a Hobbit?",
+        "text":"What was Gollum's name as a Hobbit?",
         "answers":["Deagol","Bandobras","Smeagol","Tobold"],
         "correct_answer": 2,
         "global_correct": 0,
@@ -93,7 +93,7 @@
         "meta_tags":["Characters"]
         },
         {
-        "text":"Who becomes Sam\'s wife?",
+        "text":"Who becomes Sam's wife?",
         "answers":["Linda Proudfoot","Primrose Cotton","Belladonna Took","Rosie Cotton","Daisy Baggins"],
         "correct_answer": 3,
         "global_correct": 0,
@@ -101,7 +101,7 @@
         "meta_tags":["Characters"]
         },
         {
-        "text":"What is Aragorn\'s horse\'s name?",
+        "text":"What is Aragorn's horse's name?",
         "answers":["Bill","Brego","Roheryn","Asfaloth"],
         "correct_answer": 1,
         "global_correct": 0,
@@ -109,7 +109,7 @@
         "meta_tags":["Characters"]
         },
         {
-        "text":"Who said, \"I don\'t want to be in a battle, but waiting on the edge of one I can\'t escape is even worse.\"?",
+        "text":"Who said, \"I don't want to be in a battle, but waiting on the edge of one I can't escape is even worse.\"?",
         "answers":["Merry","Frodo","Eowyn","Pippin","Gimli"],
         "correct_answer": 3,
         "global_correct": 0,

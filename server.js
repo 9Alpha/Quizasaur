@@ -1,12 +1,13 @@
 var  express =  require('express');
 var  path =  require('path');
 
-var xhr = new XMLHttpRequest();
 
 var  app =  express();
 
 var fs = require("fs");
 var content = fs.readFileSync("public/index.html", 'utf8');
+var questJSON = fs.readFileSync("public/js/questions1.json");
+var questions = JSON.parse(questJSON);
 
 app.use("/public", express.static(path.join(__dirname,'public')));
 
@@ -15,7 +16,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/quiz', function (req, res) {
-	res.send('Ayp!!');
+	res.send(questions);
 });
 
 app.get('/scores', function (req, res) {

@@ -2,6 +2,7 @@ var $loginPage, $questPage, $finPage, $nameIn;
 var userName, quizLen, currentPage, numCorrect; 
 var pageAnswered = [];
 var tags = [];
+var quiz;
 var answChoice = [];
 var answCorrect = [];
 var questChosen = true;
@@ -96,15 +97,17 @@ function makeBadPie() {
 }
 
 function toFinish() {
+        
+    
 	$questPage.hide();
-	$finPage.fadeIn(200);
+	
 	numCorrect = 0;
 	getTags();
 
 	var forQuestTable = "";
 	var forLegend = "";
 
-	forQuestTable += "<thead><tr><th>Question</th><th>Result</th></tr></thead>"
+	forQuestTable += "<thead><tr><th>Question</th><th>Result</th><th>Global Percent Correct</th></tr></thead>"
 
 	for (var i = 0; i < tags.length; i++) {
 		rightTags.push(0);
@@ -112,11 +115,15 @@ function toFinish() {
 	}
 
 	for (var i = 0; i < quizLen; i++) {
+        
+        quiz.questions[questsToUse[i]].global_total++;
 
 		if (answCorrect[i]) {
 			numCorrect++;
+            
+            quiz.questions[questsToUse[i]].global_correct++;
 
-			forQuestTable += "<tr><td>"+quiz.questions[questsToUse[i]].text+"</td><td class=\"success\">Correct</td>"
+			forQuestTable += "<tr><td>"+quiz.questions[questsToUse[i]].text+"</td><td class=\"success\">Correct</td><td>"+Math.round((quiz.questions[questsToUse[i]].global_correct/quiz.questions[questsToUse[i]].global_total)*100)+"%</td></tr>"
 
 			for (var j = 0; j < quiz.questions[questsToUse[i]].meta_tags.length; j++) {
 				for (var k = 0; k < tags.length; k++) {
@@ -128,7 +135,7 @@ function toFinish() {
 			}
 		} else {
 
-			forQuestTable += "<tr><td>"+quiz.questions[questsToUse[i]].text+"</td><td class=\"danger\">Incorrect</td>"
+			forQuestTable += "<tr><td>"+quiz.questions[questsToUse[i]].text+"</td><td class=\"danger\">Incorrect</td><td>"+Math.round((quiz.questions[questsToUse[i]].global_correct/quiz.questions[questsToUse[i]].global_total)*100)+"%</td></tr>"
 
 			for (var j = 0; j < quiz.questions[questsToUse[i]].meta_tags.length; j++) {
 				for (var k = 0; k < tags.length; k++) {
@@ -140,6 +147,13 @@ function toFinish() {
 			}
 		}
 	}
+    
+    $.post('/scores', JSON.stringify(quiz)).done( function(data) {
+        quiz = data;  
+        console.log(quiz);
+        }).fail( function(){ 
+            alert("Fail");
+    });
 
 	for (var k = 0; k < tags.length; k++) {
 		forLegend += "<div id=\"key"+k+"\"><label id=\"lkey"+k+"\" class=\"legend\" for=\"key"+k+"\">"+tags[k]+"</label></div><br>"
@@ -171,6 +185,7 @@ function toFinish() {
 	$('#score').text("You got "+numCorrect+" questions right out of "+quizLen+"!");
 
 
+    $finPage.fadeIn(200);
 
 }
 
@@ -184,38 +199,73 @@ function nameIsThere() {
 }
 
 function toQuestions() {
-	$loginPage.hide();
-	
-	userName = $nameIn.val();
-	$('#nameTitle').text('Hey ' + userName + '!');
-	$('#quest').text(quiz.questions[questsToUse[0]].text);
+    
+    $.getJSON('/quiz')
+    .done( function(data) {  
+        quiz = data;
+        
+        
+        quizLen = 2;//quiz.questions.length;
+        for (var i = 0; i < quizLen; i++) {
+            var a = randomInt(0, quiz.questions.length - 1);
+            while (questChosen === true && questsToUse.length !== 0) {
+                for (var j = 0; j < questsToUse.length; j++) {
+                    if (questsToUse[j] === a) {
+                        a = randomInt(0, quiz.questions.length - 1);
+                        break;
+                    } else if (j === questsToUse.length-1) {
+                        questChosen = false;
+                    }
+                }
+            } 
+            questsToUse.push(a);
+            console.log(questsToUse[i]);
+            questChosen = true;
+            pageAnswered.push(false);
+            answCorrect.push(false);
+        }
 
-	currentPage = 0;
+        $('#quizTitle').text("Welcome to the \""+quiz.title+"\"");
+        $('#quizDes').text(quiz.description);
+
+        $loginPage.hide();
+
+        userName = $nameIn.val();
+        $('#nameTitle').text('Hey ' + userName + '!');
+        $('#quest').text(quiz.questions[questsToUse[0]].text);
+
+        currentPage = 0;
 
 
-	var radioHTML = "";
+        var radioHTML = "";
 
-	for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-		radioHTML += "<input type=\"radio\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
-	}
+        for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
+            radioHTML += "<input type=\"radio\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
+        }
 
-	$('#getAnswer').html(radioHTML);
+        $('#getAnswer').html(radioHTML);
 
-	for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-		$('#lr'+i).text(quiz.questions[questsToUse[currentPage]].answers[i])
-	}
+        for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
+            $('#lr'+i).text(quiz.questions[questsToUse[currentPage]].answers[i])
+        }
 
-	$('input[name="answer"]').prop('checked', false);
-	if (pageAnswered[currentPage]) {
-		for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-			if (i === answChoice[currentPage]) {
-				$('#r'+i).prop('checked', true);
-				break;
-			}
-		}
-	}
+        $('input[name="answer"]').prop('checked', false);
+        if (pageAnswered[currentPage]) {
+            for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
+                if (i === answChoice[currentPage]) {
+                    $('#r'+i).prop('checked', true);
+                    break;
+                }
+            }
+        }
 
-	$questPage.fadeIn(200);
+        $questPage.fadeIn(200);
+    }).fail( function() {
+     alert("Quiz JSON file not found");   
+    });
+    
+    
+    
 
 }  
 
@@ -224,25 +274,7 @@ function toLogin() {
 	$questPage.hide();
 }
 
-quizLen = quiz.questions.length;
-for (var i = 0; i < quizLen; i++) {
-	var a = randomInt(0, quiz.questions.length - 1);
-	while (questChosen === true && questsToUse.length !== 0) {
-		for (var j = 0; j < questsToUse.length; j++) {
-			if (questsToUse[j] === a) {
-				a = randomInt(0, quiz.questions.length - 1);
-				break;
-			} else if (j === questsToUse.length-1) {
-				questChosen = false;
-			}
-		}
-	} 
-	questsToUse.push(a);
-	console.log(questsToUse[i]);
-	questChosen = true;
-	pageAnswered.push(false);
-	answCorrect.push(false);
-}
+
 
 
 $nameIn = $('#name');
@@ -252,8 +284,7 @@ $finPage = $('#fin');
 $questPage.hide();
 $finPage.hide();
 $('#back').hide();
-$('#quizTitle').text("Welcome to the \""+quiz.title+"\"");
-$('#quizDes').text(quiz.description);
+
 
 
 $('#continue').on('click', nameIsThere);

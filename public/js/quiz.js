@@ -148,12 +148,16 @@ function toFinish() {
 		}
 	}
     
-    $.post('/scores', JSON.stringify(quiz)).done( function(data) {
-        quiz = data;  
-        console.log(quiz);
-        }).fail( function(){ 
-            alert("Fail");
+    
+    $.ajax ({
+        type: "POST",
+        url: "http://localhost:5000/scores",
+        data: JSON.stringify(quiz),
+        contentType: "application/json"
     });
+    
+    console.log(JSON.stringify(quiz));
+    
 
 	for (var k = 0; k < tags.length; k++) {
 		forLegend += "<div id=\"key"+k+"\"><label id=\"lkey"+k+"\" class=\"legend\" for=\"key"+k+"\">"+tags[k]+"</label></div><br>"

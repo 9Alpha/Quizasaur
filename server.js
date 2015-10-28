@@ -18,12 +18,10 @@ app.get('/quiz', function (req, res) {
 });
 
 app.post('/scores', function (req, res) {
-    if (req.body === null){
-        console.log(JSON.stringify(req.body));
-    } else 
-        console.log("Failed");
+    console.log("******************************************");
+    console.log(req);
+    console.log("******************************************");
     //fs.writeFileSync("public/js/questions1.json", JSON.stringify(req.body));
-	res.send(req.body);
 });
 
 

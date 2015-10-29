@@ -207,6 +207,7 @@ function toQuestions() {
     $.getJSON('/quiz')
     .done( function(data) {  
         quiz = data;
+        console.log(quiz);
         
         
         quizLen = quiz.questions.length;

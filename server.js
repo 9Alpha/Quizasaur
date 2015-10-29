@@ -1,7 +1,11 @@
 var  express =  require('express');
 var  path =  require('path');
-
 var  app =  express();
+
+var bodyParser = require('body-parser');  
+
+app.use(bodyParser.json());  
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var fs = require("fs");
 var content = fs.readFileSync("public/index.html", 'utf8');
@@ -18,10 +22,10 @@ app.get('/quiz', function (req, res) {
 });
 
 app.post('/scores', function (req, res) {
-    console.log("******************************************");
-    console.log(req);
-    console.log("******************************************");
-    //fs.writeFileSync("public/js/questions1.json", JSON.stringify(req.body));
+    //console.log("******************************************");
+    //console.log(req.body);
+    //console.log("******************************************");
+    fs.writeFileSync("public/js/questions1.json", JSON.stringify(req.body));
 });
 
 

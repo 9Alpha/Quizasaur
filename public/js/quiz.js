@@ -209,7 +209,7 @@ function toQuestions() {
         quiz = data;
         
         
-        quizLen = 2;//quiz.questions.length;
+        quizLen = quiz.questions.length;
         for (var i = 0; i < quizLen; i++) {
             var a = randomInt(0, quiz.questions.length - 1);
             while (questChosen === true && questsToUse.length !== 0) {

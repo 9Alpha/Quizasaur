@@ -2,7 +2,7 @@
     "title":"LoTR Quiz",
     "description":"How well do you know your rings?",
     "meta_tags":["Lord of The Rings", "LoTR", "Tolkien", "Hobbits"],
-    "difficulty":"13",
+    "difficulty":"17",
     "questions":[
         {
         "text":"Who said, \"Nine companions. So be it. You shall be the fellowship of the ring.\"?",

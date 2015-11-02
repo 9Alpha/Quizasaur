@@ -263,7 +263,7 @@ function toQuestions() {
                 }
             }
         }
-
+        $('#top').text(quiz.title);
         $questPage.fadeIn(200);
     }).fail( function() {
      alert("Quiz JSON file not found");   
@@ -294,8 +294,7 @@ $('#back').hide();
 
 $('#continue').on('click', nameIsThere);
 
-$nameIn.on('return', function(e) {
-    alert("Enter");
+$('#getName').on('submit', function(e) {
 	e.preventDefault();
     nameIsThere();
 })

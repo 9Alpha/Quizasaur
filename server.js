@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
 });
 
 app.get('/quiz', function (req, res) {
-    var questJSON = fs.readFileSync("public/js/questions1.json");
+    var questJSON = fs.readFileSync("questions1.json");
 	res.send(questJSON);
 });
 
@@ -26,7 +26,8 @@ app.post('/scores', function (req, res) {
     //console.log("******************************************");
     //console.log(req.body);
     //console.log("******************************************");
-    fs.writeFileSync("public/js/questions1.json", JSON.stringify(req.body));
+    fs.writeFileSync("questions1.json", JSON.stringify(req.body));
+    res.send("Yay!!!");
 });
 
 

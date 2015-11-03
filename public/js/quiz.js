@@ -209,7 +209,6 @@ function toQuestions() {
         quiz = data;
         console.log(quiz);
         
-        
         quizLen = quiz.questions.length;
         for (var i = 0; i < quizLen; i++) {
             var a = randomInt(0, quiz.questions.length - 1);
@@ -240,7 +239,7 @@ function toQuestions() {
         $('#quest').text(quiz.questions[questsToUse[0]].text);
 
         currentPage = 0;
-
+        getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
 
         var radioHTML = "";
 
@@ -279,6 +278,28 @@ function toLogin() {
 	$questPage.hide();
 }
 
+
+function getImg(tag) {
+    
+    var imgObj;
+    
+    console.log(tag);
+    
+    $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1d9714e46278a986d2bb40bc40baf11c&text="+tag+"&tag_mode=all&privacy_filter=1&per_page=20&format=json&nojsoncallback=1").done( function(data) {
+        
+    imgObj = data;
+    console.log(imgObj);
+        
+    var choice = randomInt(0, 19);
+    
+    nSrc = "https://farm"+imgObj.photos.photo[choice].farm+".staticflickr.com/"+imgObj.photos.photo[choice].server+"/"+imgObj.photos.photo[choice].id+"_"+imgObj.photos.photo[choice].secret+"_z.jpg"
+    
+    console.log(nSrc);
+    
+    $('#flickImg').attr('src', nSrc); 
+        
+    });
+}
 
 
 
@@ -330,9 +351,11 @@ $('#forward').on('click', function() {
 		$questPage.fadeOut(200);
 		setTimeout(function(){
 			$('#lForward').text('');
-
+            
 
 			currentPage++;
+            
+            getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
 
 
 			if (currentPage === questsToUse.length) {
@@ -412,7 +435,7 @@ $('#back').on('click', function() {
 	setTimeout(function(){
 
 		currentPage--;
-
+        getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
 		var radioHTML = "";
 
 		for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {

@@ -154,7 +154,7 @@
         "correct_answer": 2,
         "global_correct": 0,
         "global_total": 0,
-        "meta_tags":["Lambas bread"]
+        "meta_tags":["Bread"]
         },
         {
         "text":"For Hobbits, what meal comes after elevensies?",
@@ -162,7 +162,7 @@
         "correct_answer": 2,
         "global_correct": 0,
         "global_total": 0,
-        "meta_tags":["Hobbits"]
+        "meta_tags":["Lunch"]
         }
     ]
 }

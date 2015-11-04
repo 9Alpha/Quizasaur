@@ -285,13 +285,14 @@ function getImg(tag) {
     
     console.log(tag);
     
-    $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1d9714e46278a986d2bb40bc40baf11c&text="+tag+"&tag_mode=all&privacy_filter=1&per_page=20&format=json&nojsoncallback=1").done( function(data) {
+    $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1d9714e46278a986d2bb40bc40baf11c&tags="+tag+"&tag_mode=all&privacy_filter=1&per_page=50&format=json&nojsoncallback=1").done( function(data) {
         
     imgObj = data;
     console.log(imgObj);
         
-    var choice = randomInt(0, 19);
-    
+    var choice = randomInt(0, imgObj.photos.photo.length-1);
+	console.log(choice);
+
     nSrc = "https://farm"+imgObj.photos.photo[choice].farm+".staticflickr.com/"+imgObj.photos.photo[choice].server+"/"+imgObj.photos.photo[choice].id+"_"+imgObj.photos.photo[choice].secret+"_z.jpg"
     
     console.log(nSrc);
@@ -354,13 +355,12 @@ $('#forward').on('click', function() {
             
 
 			currentPage++;
-            
-            getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
-
 
 			if (currentPage === questsToUse.length) {
 				toFinish();
-			}
+			} else {
+            	getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
+			}	
 
 			var radioHTML = "";
 

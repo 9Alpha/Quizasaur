@@ -18,15 +18,22 @@ app.get('/', function (req, res) {
 });
 
 app.get('/quiz', function (req, res) {
-    var questJSON = fs.readFileSync("questions1.json");
+    var questJSON = fs.readFileSync("data/questions1.json");
+	res.send(questJSON);
+});
+
+app.post('/quiz', function (req, res) {
+    fs.writeFileSync("data/questions1.json", JSON.stringify(req.body));
+    res.send("Yay!!!");
+});
+
+app.get('/scores', function (req, res) {
+    var questJSON = fs.readFileSync("data/highscores.json");
 	res.send(questJSON);
 });
 
 app.post('/scores', function (req, res) {
-    //console.log("******************************************");
-    //console.log(req.body);
-    //console.log("******************************************");
-    fs.writeFileSync("questions1.json", JSON.stringify(req.body));
+    fs.writeFileSync("data/highscores.json", JSON.stringify(req.body));
     res.send("Yay!!!");
 });
 

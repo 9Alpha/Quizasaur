@@ -3,6 +3,7 @@ var userName, quizLen, currentPage, numCorrect;
 var pageAnswered = [];
 var tags = [];
 var quiz;
+var highscores = [];
 var answChoice = [];
 var answCorrect = [];
 var questChosen = true;
@@ -11,10 +12,27 @@ var fadeAgain = true;
 var questsToUse = [];
 var rightTags = [];
 var wrongTags = [];
-var pieColors = ["#6495ED", "#DC143C", "#00FFFF", "#00008B", "#B8860B", "#A9A9A9", "#006400", "#8B008B", "#556B2F", "#FF8C00", "#8B0000", "#8FBC8F"];
+var pieColors = [];
 
 function randomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function addPieColor() {
+	var num =  randomInt(0, 16777215);
+	var numHex = num.toString(16);
+	if (numHex.length === 6);
+	else if (numHex.length === 1)
+		numHex = "00000"+numHex;
+	else if (numHex.length === 2)
+		numHex = "0000"+numHex;
+	else if (numHex.length === 3)
+		numHex = "000"+numHex;
+	else if (numHex.length === 4)
+		numHex = "00"+numHex;
+	else if (numHex.length === 5)
+		numHex = "0"+numHex;
+	pieColors.push("#"+numHex);
 }
 
 function getTags() {
@@ -22,6 +40,7 @@ function getTags() {
 		for (var j = 0; j < quiz.questions[i].meta_tags.length; j++) {
 			if (tags.length === 0) {
 				tags.push(quiz.questions[i].meta_tags[j]);
+				addPieColor();
 				break;
 			}
 			for (var k = 0; k < tags.length; k++) {
@@ -29,6 +48,7 @@ function getTags() {
 					break;
 				} else if (k === tags.length - 1) {
 					tags.push(quiz.questions[i].meta_tags[j]);
+					addPieColor();
 				}
 			}
 		}
@@ -106,8 +126,10 @@ function toFinish() {
 
 	var forQuestTable = "";
 	var forLegend = "";
+	var forScoresTable = "";
 
 	forQuestTable += "<thead><tr><th>Question</th><th>Result</th><th>Global Percent Correct</th></tr></thead>"
+	forScoresTable += "<thead><tr><th>Name</th><th>Percent Correct</th></tr></thead>"
 
 	for (var i = 0; i < tags.length; i++) {
 		rightTags.push(0);
@@ -147,25 +169,65 @@ function toFinish() {
 			}
 		}
 	}
+
+
+	var newUser = {
+		"name": userName,
+		"score": numCorrect/quizLen
+	}
+
+	highscores.push(newUser);
+
+	var sortedScores = highscores;
+
+	var x;
+	var i, j;
+	for (i = 0; i < sortedScores.length; i++) {
+		x = sortedScores[i];
+		j = i;
+		while (j > 0 && sortedScores[j - 1].score > x.score) {
+			sortedScores[j] = sortedScores[j - 1];
+			j--;
+		}
+		sortedScores[j] = x;
+	}
+
+
+	for (i = sortedScores.length - 1; i >= 0; i--) {
+		if (sortedScores.length - 1  - i === 10)
+			break;
+		if (sortedScores[i].name === newUser.name) {
+		    forScoresTable += "<tr class=\"info\"><td>"+sortedScores[i].name+" **You!**</td><td>"+Math.round(sortedScores[i].score*100)+"%</td></tr>";
+		} else {
+			forScoresTable += "<tr><td>"+sortedScores[i].name+"</td><td>"+Math.round(sortedScores[i].score*100)+"%</td></tr>";
+		}
+	}
+
+
     
     
     $.ajax ({
         type: "POST",
-        url: "http://localhost:5000/scores",
+        url: "/quiz",
         data: JSON.stringify(quiz),
         contentType: "application/json"
     });
-    
-    console.log(JSON.stringify(quiz));
-    
+
+    $.ajax ({
+        type: "POST",
+        url: "/scores",
+        data: JSON.stringify(sortedScores),
+        contentType: "application/json"
+    });
+        
 
 	for (var k = 0; k < tags.length; k++) {
-		forLegend += "<div id=\"key"+k+"\"><label id=\"lkey"+k+"\" class=\"legend\" for=\"key"+k+"\">"+tags[k]+"</label></div><br>"
+		forLegend += "<div \"key"+k+"\" style=\"width:20px;height:20px;background:"+pieColors[k]+";margin-left:10px\"><label id=\"lkey"+k+"\" class=\"legend\" for=\"key"+k+"\">"+tags[k]+"</label></div><br>"
 	}
 
 	$('#leg').html(forLegend);
 
-
+	$('#hScores').html(forScoresTable);
 	$('#viewAnsw').html(forQuestTable);
 
 	makeGoodPie();
@@ -208,6 +270,14 @@ function toQuestions() {
     .done( function(data) {  
         quiz = data;
         console.log(quiz);
+
+        $.getJSON('/scores')
+        .done( function(data) {
+        	highscores = data;
+        })
+        .fail( function() {
+        	alert("Failed to load highscores!")
+        });
         
         quizLen = quiz.questions.length;
         for (var i = 0; i < quizLen; i++) {

@@ -43,13 +43,17 @@
 			<input type="button" id="forward" class="btn btn-sm btn-default" value="Next">
 			<label for="forward" id="lForward" class="label label-danger"></label>
 		</form>
-        <img id="flickImg" src="" width="640" height="640" alt="Didn't work" class="center-block">
-
+        <img id="flickImg" class="img-rounded center-block" src="" alt="Didn't work">
 	</div>
 	<div id="fin">
 		<t1>All done!</t1><br>
 		<t2 id="score"></t2><br>
-		<h1 id="note"></h1><br>
+		<h1 id="note"></h1><br><br>
+		<h3>Leaderboard</h3>
+		<div class="col-sm-6 col-sm-offset-3">
+			<table id="hScores" class="table table-bordered table-hover"></table><br>
+		</div>
+		<div class="clearfix"></div>
 		<canvas id="right" width="200" height="200"></canvas>
 		<label id="lRight" class="label label-success" for="right">Tags for Right Answers</label>
 		<canvas id="wrong" width="200" height="200"></canvas>

@@ -15,19 +15,21 @@ var fs = require("fs");
 app.use("/public", express.static(path.join(__dirname,'public')));
 
 app.get('/', function (req, res) {
-	res.render('index.ejs', function() {
+    var toSend = [];
+    (function makeNumbers() {
         var quizes = JSON.parse(fs.readFileSync('data/allQuizes.json'));
         var titles = [];
         for (var i = 0; i < quizes.length; i++) {
             titles.push(quizes[i].title);
         }
-        return titles;
-    });
+        toSend = titles;
+    })();
+	res.render('index.ejs', {titles: toSend});
 });
 
-app.get('/quiz', function (req, res) {
-    var questJSON = fs.readFileSync("data/questions1.json");
-	res.send(questJSON);
+app.get('/quiz/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/questions1.json"));
+	res.send(questJSON[req.perams.id]);
 });
 
 app.post('/quiz', function (req, res) {

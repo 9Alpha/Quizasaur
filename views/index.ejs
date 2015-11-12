@@ -18,17 +18,16 @@
 			</div>
 		</form>
 		<div class="clearfix"></div>
-        <div class="dropdown" id="titleChoose">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
-                <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                <li><a href="#">HTML</a></li>
-                <li><a href="#">CSS</a></li>
-                <li><a href="#">JavaScript</a></li>
+        <div class="dropdown col-lg-1 col-lg-offset-4" id="titleChoose">
+            <button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown">Pick a quiz!<span class="caret"></span></button>
+            <ul class="dropdown-menu centerDropdown">
+                <% for (var i = 0; i < titles.length; i++) { %>
+                <li><a id="<%=i%>"><%=titles[i]%></a></li>
+                <%}%>
             </ul>
         </div>
 		<form id="firstBtn">
-			<input type="button" id="continue" class="btn btn-lg btn-default" value="Continue">
+			<input type="button" id="continue" class="btn btn-lg btn-default col-lg-1 col-lg-offset-2" value="Continue">
 		</form>
 	</div>
 	<div id="questions">

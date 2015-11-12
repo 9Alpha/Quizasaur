@@ -10,6 +10,12 @@ body {
     margin-bottom: 2%;
 }
 
+.centerDropdown {
+    left: auto !important;
+    right: auto !important;
+    text-align: center !important;
+}
+
 t1 {
 	color: #1E1D16;
 	font-size: 300%;

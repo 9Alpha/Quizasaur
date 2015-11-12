@@ -13,6 +13,7 @@ var questsToUse = [];
 var rightTags = [];
 var wrongTags = [];
 var pieColors = [];
+var whatQuizToUse;
 
 function randomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -266,7 +267,7 @@ function nameIsThere() {
 
 function toQuestions() {
     
-    $.getJSON('/quiz')
+    $.getJSON('/quiz:'+toUse)
     .done( function(data) {  
         quiz = data;
         console.log(quiz);
@@ -389,10 +390,14 @@ $('#continue').on('click', nameIsThere);
 $('#getName').on('submit', function(e) {
 	e.preventDefault();
     nameIsThere();
-})
+});
 $('#getAnswer').on('click', function() {
 	pageAnswered[currentPage] = false;
-})
+});
+
+$('.dropdown-menu li').on('click', function() {
+   alert(this.id); 
+});
 
 $('#forward').on('click', function() {
 	

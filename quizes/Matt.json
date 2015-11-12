@@ -22,10 +22,12 @@
                 "Conor",
                 "James"
             ],
-            "correct_answer": "Borthwick",
+            "correct_answer": "0",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "english"
+            "global_total": 1,
+            "meta_tags": [
+                "english"
+            ]
         },
         {
             "text": "2). What is 9 plus 10?",
@@ -36,10 +38,12 @@
                 "19",
                 "394950495"
             ],
-            "correct_answer": "21",
+            "correct_answer": "0",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "addition"
+            "global_total": 1,
+            "meta_tags": [
+                "addition"
+            ]
         },
         {
             "text": "3). What is Kerner's mom's maiden name?",
@@ -48,10 +52,12 @@
                 "Neumeyer",
                 "Katz"
             ],
-            "correct_answer": "Gallow",
+            "correct_answer": "0",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "name"
+            "global_total": 1,
+            "meta_tags": [
+                "name"
+            ]
         },
         {
             "text": "4). What is Ivkov's middle name?",
@@ -62,10 +68,12 @@
                 "Milow",
                 "Novak"
             ],
-            "correct_answer": "Javier",
+            "correct_answer": "0",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "argentina"
+            "global_total": 1,
+            "meta_tags": [
+                "argentina"
+            ]
         },
         {
             "text": "5). What is Armstrongs's middle name?",
@@ -76,10 +84,12 @@
                 "Jacob",
                 "Hayden"
             ],
-            "correct_answer": "Samuel",
+            "correct_answer": "2",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "middlename"
+            "global_total": 1,
+            "meta_tags": [
+                "middlename"
+            ]
         },
         {
             "text": "6). What is Joon's favorite league champion?",
@@ -90,10 +100,12 @@
                 "Yasuo",
                 "Fiora"
             ],
-            "correct_answer": "Yasuo",
+            "correct_answer": "3",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "leagueoflegends"
+            "global_total": 1,
+            "meta_tags": [
+                "leagueoflegends"
+            ]
         },
         {
             "text": "7). Most OP league champion?",
@@ -104,10 +116,12 @@
                 "Garen",
                 "Leblanc"
             ],
-            "correct_answer": "Darius",
+            "correct_answer": "0",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "leagueoflegends"
+            "global_total": 1,
+            "meta_tags": [
+                "leagueoflegends"
+            ]
         },
         {
             "text": "8). What is Andrea's (matt's mom's) favorite sport?",
@@ -117,10 +131,12 @@
                 "Fieldhockey",
                 "Skiing"
             ],
-            "correct_answer": "Tennis",
+            "correct_answer": "0",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "sports"
+            "global_total": 1,
+            "meta_tags": [
+                "sports"
+            ]
         },
         {
             "text": "9). What is Scott Armstrong's favorite book?",
@@ -131,10 +147,12 @@
                 "American Sniper",
                 "Pelican Brief"
             ],
-            "correct_answer": "Pet Cemetery",
+            "correct_answer": "1",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "books"
+            "global_total": 1,
+            "meta_tags": [
+                "books"
+            ]
         },
         {
             "text": "10). Who is Conor Yuen's best friend?",
@@ -145,10 +163,12 @@
                 "Ulises Acosta",
                 "Matt Armstrong"
             ],
-            "correct_answer": "No Friends",
+            "correct_answer": "2",
             "global_correct": 0,
-            "global_total": 0,
-            "meta_tags": "foreveralone"
+            "global_total": 1,
+            "meta_tags": [
+                "foreveralone"
+            ]
         }
     ]
 }

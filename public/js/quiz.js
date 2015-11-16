@@ -208,15 +208,15 @@ function toFinish() {
     
     
     $.ajax ({
-        type: "POST",
-        url: "/quiz",
+        type: "PUT",
+        url: "/quiz/:"+whatQuizToUse,
         data: JSON.stringify(quiz),
         contentType: "application/json"
     });
 
     $.ajax ({
-        type: "POST",
-        url: "/scores",
+        type: "PUT",
+        url: "/scores/:"+whatQuizToUse,
         data: JSON.stringify(sortedScores),
         contentType: "application/json"
     });
@@ -266,13 +266,12 @@ function nameIsThere() {
 }
 
 function toQuestions() {
-    
-    $.getJSON('/quiz:'+toUse)
+    $.getJSON('/quiz/:'+whatQuizToUse)
     .done( function(data) {  
         quiz = data;
         console.log(quiz);
 
-        $.getJSON('/scores')
+        $.getJSON('/scores/:'+whatQuizToUse)
         .done( function(data) {
         	highscores = data;
         })
@@ -396,7 +395,9 @@ $('#getAnswer').on('click', function() {
 });
 
 $('.dropdown-menu li').on('click', function() {
-   alert(this.id); 
+    whatQuizToUse = this.id;
+    var newText = $('#'+this.id).children('a').text();
+    $('#dropDownName').text(newText);
 });
 
 $('#forward').on('click', function() {

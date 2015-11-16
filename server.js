@@ -28,22 +28,26 @@ app.get('/', function (req, res) {
 });
 
 app.get('/quiz/:id', function (req, res) {
-    var questJSON = JSON.parse(fs.readFileSync("data/questions1.json"));
-	res.send(questJSON[req.perams.id]);
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+	res.send(questJSON[req.params.id.substring(1, req.params.id.length)]);
 });
 
-app.post('/quiz', function (req, res) {
-    fs.writeFileSync("data/questions1.json", JSON.stringify(req.body));
+app.put('/quiz/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+    questJSON[req.params.id.substring(1, req.params.id.length)] = req.body;
+    fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
     res.send("Yay!!!");
 });
 
-app.get('/scores', function (req, res) {
-    var questJSON = fs.readFileSync("data/highscores.json");
-	res.send(questJSON);
+app.get('/scores/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+	res.send(questJSON[req.params.id.substring(1, req.params.id.length)]);
 });
 
-app.post('/scores', function (req, res) {
-    fs.writeFileSync("data/highscores.json", JSON.stringify(req.body));
+app.put('/scores/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+    questJSON[req.params.id.substring(1, req.params.id.length)] = req.body;
+    fs.writeFileSync("data/highscores.json", JSON.stringify(questJSON));
     res.send("Yay!!!");
 });
 

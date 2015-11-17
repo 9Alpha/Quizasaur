@@ -29,24 +29,24 @@ app.get('/', function (req, res) {
 
 app.get('/quiz/:id', function (req, res) {
     var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
-	res.send(questJSON[req.params.id.substring(1, req.params.id.length)]);
+	res.send(questJSON[req.params.id]);
 });
 
 app.put('/quiz/:id', function (req, res) {
     var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
-    questJSON[req.params.id.substring(1, req.params.id.length)] = req.body;
+    questJSON[req.params.id] = req.body;
     fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
     res.send("Yay!!!");
 });
 
 app.get('/scores/:id', function (req, res) {
     var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
-	res.send(questJSON[req.params.id.substring(1, req.params.id.length)]);
+	res.send(questJSON[req.params.id]);
 });
 
 app.put('/scores/:id', function (req, res) {
     var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
-    questJSON[req.params.id.substring(1, req.params.id.length)] = req.body;
+    questJSON[req.params.id] = req.body;
     fs.writeFileSync("data/highscores.json", JSON.stringify(questJSON));
     res.send("Yay!!!");
 });

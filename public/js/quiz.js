@@ -209,14 +209,14 @@ function toFinish() {
     
     $.ajax ({
         type: "PUT",
-        url: "/quiz/:"+whatQuizToUse,
+        url: "/quiz/"+whatQuizToUse,
         data: JSON.stringify(quiz),
         contentType: "application/json"
     });
 
     $.ajax ({
         type: "PUT",
-        url: "/scores/:"+whatQuizToUse,
+        url: "/scores/"+whatQuizToUse,
         data: JSON.stringify(sortedScores),
         contentType: "application/json"
     });
@@ -238,7 +238,7 @@ function toFinish() {
 	if (numCorrect === quizLen) {
 		$('#note').text("Perfect score! Way to go!");
 	} if (numCorrect < quizLen) {
-		$('#note').text("You\'re on your way to LoTR mastery!");
+		$('#note').text("You\'re on your way to mastery!");
 	} if (numCorrect <= Math.round(quizLen*.75)) {
 		$('#note').text("A solid showing!");
 	} if (numCorrect <= Math.round(quizLen*.5)) {
@@ -266,12 +266,12 @@ function nameIsThere() {
 }
 
 function toQuestions() {
-    $.getJSON('/quiz/:'+whatQuizToUse)
+    $.getJSON('/quiz/'+whatQuizToUse)
     .done( function(data) {  
         quiz = data;
         console.log(quiz);
 
-        $.getJSON('/scores/:'+whatQuizToUse)
+        $.getJSON('/scores/'+whatQuizToUse)
         .done( function(data) {
         	highscores = data;
         })

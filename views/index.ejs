@@ -30,7 +30,7 @@
 			<label id="lopt3" for="opt3">Edit an existing quiz</label>
 		</form>
         <div class="clearfix"></div>
-        <div class="dropdown col-lg-1 col-lg-offset-4" id="titleChoose">
+        <div class="dropdown col-md-4 col-md-offset-4" id="titleChoose">
             <button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown"><span id="dropDownName">Pick a Quiz!</span><span class="caret"></span></button>
             <ul class="dropdown-menu centerDropdown">
                 <% for (var i = 0; i < titles.length; i++) { %>
@@ -38,8 +38,9 @@
                 <%}%>
             </ul>
         </div>
+        <div class="clearfix"></div><br>
 		<form id="firstBtn">
-			<input type="button" id="continue" class="btn btn-lg btn-default col-lg-1 col-lg-offset-2" value="Continue">
+			<input type="button" id="continue" class="btn btn-lg btn-default col-lg-2 col-lg-offset-5" value="Continue">
 		</form>
 	</div>
 	<div id="questions">

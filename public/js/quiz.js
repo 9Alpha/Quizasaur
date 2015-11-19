@@ -373,6 +373,26 @@ function getImg(tag) {
 }
 
 
+function quizCreate() {
+    
+}
+
+function quizChoose() {
+    $('#dropDownName').text('Pick a quiz to use!');
+    $('#titleChoose').fadeIn(150);
+}
+
+function quizEdit() {
+    $('#dropDownName').text('Pick a quiz to edit!');
+    $('#titleChoose').fadeIn(150);
+}
+
+function quizDelete() {
+    $('#dropDownName').text('Pick a quiz to delete!');
+    $('#titleChoose').fadeIn(150);
+}
+
+
 
 $nameIn = $('#name');
 $loginPage = $('#login');
@@ -381,8 +401,21 @@ $finPage = $('#fin');
 $questPage.hide();
 $finPage.hide();
 $('#back').hide();
+$('#titleChoose').hide();
+$('#firstBtn').hide();
 
 
+$('#doWithQuiz').on('click', function(e) {
+    if ($('#opt0').is(':checked')) {   
+        quizChoose();
+    } else if ($('#opt1').is(':checked')) {   
+        quizCreate(); 
+    } else if ($('#opt2').is(':checked')) {   
+        quizDelete(); 
+    }else if ($('#opt3').is(':checked')) {   
+        quizEdit();    
+    }
+});
 
 $('#continue').on('click', nameIsThere);
 
@@ -398,6 +431,7 @@ $('.dropdown-menu li').on('click', function() {
     whatQuizToUse = this.id;
     var newText = $('#'+this.id).children('a').text();
     $('#dropDownName').text(newText);
+    $('#firstBtn').fadeIn(150);
 });
 
 $('#forward').on('click', function() {

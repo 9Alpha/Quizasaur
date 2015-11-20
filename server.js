@@ -1,23 +1,54 @@
 var  express =  require('express');
 var  path =  require('path');
-
 var  app =  express();
+var ejs = require('ejs');
+
+var bodyParser = require('body-parser');  
+
+app.use(bodyParser.json());  
+app.use(bodyParser.urlencoded({ extended: false }));
 
 var fs = require("fs");
-var content = fs.readFileSync("public/index.html", 'utf8');
+//var content = fs.readFileSync("public/index.html", 'utf8');
+
 
 app.use("/public", express.static(path.join(__dirname,'public')));
 
 app.get('/', function (req, res) {
-	res.send(content);
+    var toSend = [];
+    (function makeNumbers() {
+        var quizes = JSON.parse(fs.readFileSync('data/allQuizes.json'));
+        var titles = [];
+        for (var i = 0; i < quizes.length; i++) {
+            titles.push(quizes[i].title);
+        }
+        toSend = titles;
+    })();
+	res.render('index.ejs', {titles: toSend});
 });
 
-app.get('/quiz', function (req, res) {
-	res.send('Ayp!!');
+app.get('/quiz/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+	res.send(questJSON[req.params.id]);
 });
 
-app.get('/scores', function (req, res) {
-	res.send('Oop!!');
+app.put('/quiz/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+    questJSON[req.params.id] = req.body;
+    fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
+    res.send("Yay!!!");
+});
+
+app.get('/scores/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+	res.send(questJSON[req.params.id]);
+});
+
+app.put('/scores/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+    questJSON[req.params.id] = req.body;
+    fs.writeFileSync("data/highscores.json", JSON.stringify(questJSON));
+    res.send("Yay!!!");
 });
 
 

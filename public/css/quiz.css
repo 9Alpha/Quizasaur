@@ -5,6 +5,17 @@ body {
 	text-align: center;
 }
 
+.imgCont {
+    margin-left: 25%;
+    margin-bottom: 2%;
+}
+
+.centerDropdown {
+    left: auto !important;
+    right: auto !important;
+    text-align: center !important;
+}
+
 t1 {
 	color: #1E1D16;
 	font-size: 300%;
@@ -41,96 +52,12 @@ legend {
     text-align: left;
 }
 
-#key0 {
-    width:20px;
-    height:20px;
-    background: #6495ED; 
-    margin-left: 10px;
-}
-
-#key1 {
-    width:20px;
-    height:20px;
-    background: #DC143C; 
-    margin-left: 10px;
-}
-
-#key2 {
-    width:20px;
-    height:20px;
-    background: #00FFFF; 
-    margin-left: 10px;
-}
-
-#key3 {
-    width:20px;
-    height:20px;
-    background: #00008B; 
-    margin-left: 10px;
-}
-
-#key4 {
-    width:20px;
-    height:20px;
-    background: #B8860B; 
-    margin-left: 10px;
-}
-
-#key5 {
-    width:20px;
-    height:20px;
-    background: #A9A9A9; 
-    margin-left: 10px;
-}
-
-#key6 {
-    width:20px;
-    height:20px;
-    background: #006400; 
-    margin-left: 10px;
-}
-
-#key7 {
-    width:20px;
-    height:20px;
-    background: #8B008B; 
-    margin-left: 10px;
-}
-
-#key8 {
-    width:20px;
-    height:20px;
-    background: #556B2F; 
-    margin-left: 10px;
-}
-
-#key9 {
-    width:20px;
-    height:20px;
-    background: #FF8C00; 
-    margin-left: 10px;
-}
-
-#key10 {
-    width:20px;
-    height:20px;
-    background: #8B0000; 
-    margin-left: 10px;
-}
-
-#key11 {
-    width:20px;
-    height:20px;
-    background: #8FBC8F; 
-    margin-left: 10px;
-}
-
 input[type="radio"]{
 	color: #1E1D16;
 	display: inline-block;
     width: 19px;
     height: 80px;
-    margin: 0 20px 0 0;
+    margin: 0 20px 0 20px;
     vertical-align: middle;
     cursor: pointer;
 }
@@ -138,7 +65,7 @@ input[type="radio"]{
 
 
 input[type="radio"]:checked + label{
-	color: #129635;
+	color: #1D7CF2;
 	font-size: 150%;
 	font-weight: bolder;
 }

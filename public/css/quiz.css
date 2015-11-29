@@ -10,6 +10,16 @@ body {
     margin-bottom: 2%;
 }
 
+.listNoDots {
+    list-style-type: none;
+    overflow: auto;
+}
+
+.listNoDots > li {
+    padding-bottom: 10px;
+    height: 44px;
+}
+
 .centerDropdown {
     left: auto !important;
     right: auto !important;
@@ -52,7 +62,7 @@ legend {
     text-align: left;
 }
 
-input[type="radio"]{
+.rad{
 	color: #1E1D16;
 	display: inline-block;
     width: 19px;
@@ -64,7 +74,7 @@ input[type="radio"]{
 
 
 
-input[type="radio"]:checked + label{
+.rad:checked + label{
 	color: #1D7CF2;
 	font-size: 150%;
 	font-weight: bolder;

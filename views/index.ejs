@@ -18,27 +18,68 @@
 			</div>
 		</form>
 		<div class="clearfix"></div>
-        <form id="doWithQuiz">
-            <label id="lopt" for="doWithQuiz">What would you like to do with your time?</label><br>
-			<input type="radio" id="opt0" name="options">
+		<form id="doWithQuiz">
+			<label id="lopt" for="doWithQuiz">What would you like to do with your time?</label><br>
+			<input type="radio" class="rad" id="opt0" name="options">
 			<label id="lopt0" for="opt0">Choose an existing quiz</label>
-			<input type="radio" id="opt1" name="options" >
+			<input type="radio" class="rad" id="opt1" name="options" >
 			<label id="lopt1" for="opt1">Create a new quiz</label>
-			<input type="radio" id="opt2" name="options" >
+			<input type="radio" class="rad" id="opt2" name="options" >
 			<label id="lopt2" for="opt2">Delete an existing quiz</label>
-			<input type="radio" id="opt3" name="options" >
+			<input type="radio" class="rad" id="opt3" name="options" >
 			<label id="lopt3" for="opt3">Edit an existing quiz</label>
 		</form>
-        <div class="clearfix"></div>
-        <div class="dropdown col-md-4 col-md-offset-4" id="titleChoose">
-            <button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown"><span id="dropDownName">Pick a Quiz!</span><span class="caret"></span></button>
-            <ul class="dropdown-menu centerDropdown">
-                <% for (var i = 0; i < titles.length; i++) { %>
-                <li id="<%=i%>"><a><%=titles[i]%></a></li>
-                <%}%>
-            </ul>
-        </div>
-        <div class="clearfix"></div><br>
+		<div class="clearfix"></div>
+		<div class="dropdown col-md-4 col-md-offset-4" id="titleChoose">
+			<button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown"><span id="dropDownName">Pick a Quiz!</span><span class="caret"></span></button>
+			<ul class="dropdown-menu centerDropdown">
+				<% for (var i = 0; i < titles.length; i++) { %>
+				<li id="<%=i%>"><a><%=titles[i]%></a></li>
+				<%}%>
+			</ul>
+		</div>
+		<div class="clearfix"></div><br>
+		<div id="editQuizBlock">
+			<form id="editQuizFlow">
+				<div class="form-group">
+					<label id="editQuizFlow_name_L" for="editQuizFlow_name" class="col-sm-2 control-label">Quiz Name</label>
+					<div class="col-sm-8">
+						<textarea id="editQuizFlow_name" class="form-control" rows="1" placeholder="Name..."></textarea>
+					</div>
+				</div>
+				<div class="clearfix"></div><br>
+				<div class="form-group">
+					<label id="editQuizFlow_descript_L" for="editQuizFlow_descript" class="col-sm-2 control-label">Quiz Description</label>
+					<div class="col-sm-8">
+						<textarea id="editQuizFlow_descript" class="form-control" rows="1" placeholder="Description..."></textarea>
+					</div>
+				</div>
+				<div class="clearfix"></div><br>
+				<div class="form-group">
+					<label id="editQuizFlow_diff_L" for="editQuizFlow_diff" class="col-sm-2 control-label">Quiz Difficulty</label>
+					<div class="col-sm-8">
+						<textarea id="editQuizFlow_diff" class="form-control" rows="1" placeholder="Difficulty from 0 to 20..."></textarea>
+					</div>
+				</div>
+				<div class="clearfix"></div><br>
+				<div>
+					<label id="editQuizFlow_globalTags_L" for="editQuizFlow_globalTags" class="col-sm-2 control-label">Quiz Meta Tags</label><br><br>
+					<ul class="listNoDots" id="editQuizFlow_globalTags">
+					</ul>
+					<input type="button" id="editQuizFlow_globalTags_add" class="btn-sm btn-info" value="Add Tag">
+					<input type="button" id="editQuizFlow_globalTags_del" class="btn-sm btn-danger" value="Delete Tag">
+				</div>
+				<div class="clearfix"></div><br>
+				<div>
+					<label id="editQuizFlow_quests_L" for="editQuizFlow_quests" class="col-sm-2 control-label">Quiz Questions</label><br><br>
+					<ul class="list-unstyled" id="editQuizFlow_quests">
+					</ul>
+					<input type="button" id="editQuizFlow_quests_add" class="btn-sm btn-info" value="Add Question">
+					<input type="button" id="editQuizFlow_quests_del" class="btn-sm btn-danger" value="Delete Question">
+				</div>
+			</form>
+		</div>
+		<div class="clearfix"></div><br>
 		<form id="firstBtn">
 			<input type="button" id="continue" class="btn btn-lg btn-default col-lg-2 col-lg-offset-5" value="Continue">
 		</form>
@@ -50,13 +91,13 @@
 		<h1 id="quest">What is two plus two?</h1>
 		<h3 id="answ"></h3>
 		<form id="getAnswer">
-			<input type="radio" id="r0" name="answer">
+			<input type="radio" class="rad" id="r0" name="answer">
 			<label id="lr0" for="r0"></label><br>
-			<input type="radio" id="r1" name="answer" >
+			<input type="radio" class="rad" id="r1" name="answer" >
 			<label id="lr1" for="r1"></label><br>
-			<input type="radio" id="r2" name="answer" >
+			<input type="radio" class="rad" id="r2" name="answer" >
 			<label id="lr2" for="r2"></label><br>
-			<input type="radio" id="r3" name="answer" >
+			<input type="radio" class="rad" id="r3" name="answer" >
 			<label id="lr3" for="r3"></label>
 		</form>
 		<form id="pageButtons">
@@ -64,7 +105,7 @@
 			<input type="button" id="forward" class="btn btn-sm btn-default" value="Next">
 			<label for="forward" id="lForward" class="label label-danger"></label>
 		</form>
-        <img id="flickImg" class="img-rounded center-block" src="" alt="Didn't work">
+		<img id="flickImg" class="img-rounded center-block" src="" alt="Didn't work">
 	</div>
 	<div id="fin">
 		<t1>All done!</t1><br>
@@ -80,9 +121,9 @@
 		<canvas id="wrong" width="200" height="200"></canvas>
 		<label id="lWrong" class="label label-danger" for="wrong">Tags for Wrong Answers</label><br><br>
 		<legend>&nbspLegend</legend>
-        <div id="leg">
-        </div>
-        <table id="viewAnsw" class="table table-bordered table-hover"></table><br><br>
+		<div id="leg">
+		</div>
+		<table id="viewAnsw" class="table table-bordered table-hover"></table><br><br>
 		<br>
 	</div>
 	<script src="public/jquery-1.11.3.js"></script>

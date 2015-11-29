@@ -14,10 +14,169 @@ var rightTags = [];
 var wrongTags = [];
 var pieColors = [];
 var whatQuizToUse;
+var editQuests = [];
+var editGlobalTags = 0;
+var editGo = false;
+var writeState = 5; //0=choose 1=create 2=delete 3=edit
 
 function randomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+$('#editQuizFlow_globalTags_add').on('click', function(e) {
+	addGlobalTag("");
+});
+
+function addGlobalTag(value) {
+	var toAdd = "";
+	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-4\"><textarea rows=\"1\" id=\"tags"+editGlobalTags+"\" class=\"form-control\" placeholder=\"Quiz Meta Tag...\">"+value+"</textarea></div></div></li>"
+	$('#editQuizFlow_globalTags').append(toAdd);
+	editGlobalTags++;
+}
+
+$('#editQuizFlow_globalTags_del').on('click', function(e) {
+	delGlobalTag();
+});
+
+function delGlobalTag() {
+	$('#editQuizFlow_globalTags').children().last().remove();
+	editGlobalTags--;
+}
+
+$('#editQuizFlow_quests_add').on('click', function(e) {
+	addQuest("");
+});
+
+function addQuest(value) {
+	var toAdd = "";
+	toAdd += "<div><li><div class=\"form-group\"><div class=\"col-sm-8\"><textarea id=\"textSpot"+editQuests.length+"\" rows=\"1\" class=\"form-control\" placeholder=\"Question Text...\">"+value+"</textarea></div></div></li><br><br><li><ul class=\"listNoDots\" id=\"listNoDots"+editQuests.length+"\"></ul><input mode=\"addA\" type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-info\" value=\"Add Answer\"><input mode=\"delA\"type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-danger\" value=\"Delete Answer\"></li><li><ul class=\"listNoDots\" id=\"listNo"+editQuests.length+"\"></ul><input mode=\"addT\" type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-info\" value=\"Add Meta Tag\"><input mode=\"delT\"type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-danger\" value=\"Delete Meta Tag\"></li><li><div class=\"col-sm-4\"><textarea id=\"editQuizFlow_quest_ans_correct"+editQuests.length+"\" class=\"form-control\" rows=\"1\" placeholder=\"Correct Answer...\"></textarea></div></li></div><br><br>";
+	editQuests.push([0, 0]);
+	$('#editQuizFlow_quests').append(toAdd);
+}
+
+$('#editQuizFlow_quests_del').on('click', function(e) {
+	delQuest();
+});
+
+function delQuest() {
+	$('#editQuizFlow_quests').children().last().remove();
+	$('#editQuizFlow_quests').children().last().remove();
+	$('#editQuizFlow_quests').children().last().remove();
+	editQuests.pop();
+}
+
+$('#editQuizFlow_quests').on('click', function(e) {
+	if (e.target.attributes['mode'].value === "addA") {
+		addAns("", e.target.id);
+	}
+	else if (e.target.attributes['mode'].value === "delA") {
+		delAns(e.target.id);
+	}
+	else if (e.target.attributes['mode'].value === "addT") {
+		addTag("", e.target.id);
+	}
+	else if (e.target.attributes['mode'].value === "delT") {
+		delTag(e.target.id);
+	}
+});
+
+function addAns(value, id) {
+	var toAdd = "";
+	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-1 radio\"><input type=\"radio\" id=\"editQuizFlow_quests0_ans0_correct\" name=\"quest0_ans\"></div><div class=\"col-sm-6\"><textarea id=\"ansSpot"+editQuests[id][0]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Answer......\">"+value+"</textarea></div></div></li>"
+	editQuests[id][0]++;
+	$('#editQuizFlow_quests').children().find('#listNoDots'+id).append(toAdd);
+}
+
+function delAns(id) {
+	$('#editQuizFlow_quests').children().find('#listNoDots'+id).children().last().remove();
+	editQuests[id][0]--;
+}
+
+function addTag(value, id) {
+	var toAdd = "";
+	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-6\"><textarea id=\"tagSpot"+editQuests[id][1]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Meta Tag...\">"+value+"</textarea></div></div></li>"
+	editQuests[id][1]++;
+	$('#editQuizFlow_quests').children().find('#listNo'+id).append(toAdd);
+}
+
+function delTag(id) {
+	$('#editQuizFlow_quests').children().find('#listNo'+id).children().last().remove();
+	editQuests[id][1]--;
+}
+
+function clenseEdit() {
+	$('#editQuizFlow_name').text("");
+	$('#editQuizFlow_descript').text("");
+	$('#editQuizFlow_diff').text("");
+	for (var i = editGlobalTags - 1; i >= 0; i--){
+		delGlobalTag();
+	}
+	for (var i = editQuests.length - 1; i >= 0; i--){
+		for (var j = editQuests[i][0] - 1; j >= 0; j--){
+			delAns(i);
+		}
+		for (var j = editQuests[i][1] - 1; j >= 0; j--){
+			delTag(i);
+		}
+		delQuest();
+	}
+}
+
+function populateEdit(quizUp) {
+	$('#editQuizFlow_name').text(quizUp.title);
+	$('#editQuizFlow_descript').text(quizUp.description);
+	$('#editQuizFlow_diff').text(quizUp.difficulty);
+	for (var i = 0; i < quizUp.meta_tags.length; i++){
+		addGlobalTag(quizUp.meta_tags[i]);
+	}
+	for (var i = 0; i < quizUp.questions.length; i++){
+		addQuest(quizUp.questions[i].text);
+		$('#editQuizFlow_quest_ans_correct'+i).text(quizUp.questions[i].correct_answer);
+		for (var j = 0; j < quizUp.questions[i].answers.length; j++){
+			addAns(quizUp.questions[i].answers[j], i);
+		}
+		for (var j = 0; j < quizUp.questions[i].meta_tags.length; j++){
+			addTag(quizUp.questions[i].meta_tags[j], i);
+		}
+	}
+}
+
+function readEdit() {
+	var temp = {
+		"title": "",
+		"description": "",
+		"difficulty": "",
+		"meta_tags": [],
+		"questions": []
+	};
+
+	temp.title = $('#editQuizFlow_name').val();
+	temp.description = $('#editQuizFlow_descript').val();
+	temp.difficulty = $('#editQuizFlow_diff').val();
+	for (var i = 0; i < editGlobalTags; i++){
+		temp.meta_tags.push($('#tags'+i).val());
+	}
+	for (var i = 0; i < editQuests.length; i++){
+		temp.questions.push({
+			"text": "",
+			"answers": [],
+			"meta_tags": [],
+			"correct_answer": "",
+			"global_total": 0,
+			"global_correct": 0
+		});
+		temp.questions[i].text = $('#textSpot'+i).val();
+		temp.questions[i].correct_answer = $('#editQuizFlow_quest_ans_correct'+i).val();
+		for (var j = 0; j < editQuests[i][0]; j++){
+			temp.questions[i].answers[j] = $('#ansSpot'+j).val();
+		}
+		for (var j = 0; j < editQuests[i][1]; j++){
+			temp.questions[i].meta_tags[j] = $('#tagSpot'+j).val();
+		}
+	}
+	return temp;
+}
+
 
 function addPieColor() {
 	var num =  randomInt(0, 16777215);
@@ -118,10 +277,10 @@ function makeBadPie() {
 }
 
 function toFinish() {
-        
-    
+
+
 	$questPage.hide();
-	
+
 	numCorrect = 0;
 	getTags();
 
@@ -138,13 +297,13 @@ function toFinish() {
 	}
 
 	for (var i = 0; i < quizLen; i++) {
-        
-        quiz.questions[questsToUse[i]].global_total++;
+
+		quiz.questions[questsToUse[i]].global_total++;
 
 		if (answCorrect[i]) {
 			numCorrect++;
-            
-            quiz.questions[questsToUse[i]].global_correct++;
+
+			quiz.questions[questsToUse[i]].global_correct++;
 
 			forQuestTable += "<tr><td>"+quiz.questions[questsToUse[i]].text+"</td><td class=\"success\">Correct</td><td>"+Math.round((quiz.questions[questsToUse[i]].global_correct/quiz.questions[questsToUse[i]].global_total)*100)+"%</td></tr>"
 
@@ -198,29 +357,29 @@ function toFinish() {
 		if (sortedScores.length - 1  - i === 10)
 			break;
 		if (sortedScores[i].name === newUser.name) {
-		    forScoresTable += "<tr class=\"info\"><td>"+sortedScores[i].name+" **You!**</td><td>"+Math.round(sortedScores[i].score*100)+"%</td></tr>";
+			forScoresTable += "<tr class=\"info\"><td>"+sortedScores[i].name+" **You!**</td><td>"+Math.round(sortedScores[i].score*100)+"%</td></tr>";
 		} else {
 			forScoresTable += "<tr><td>"+sortedScores[i].name+"</td><td>"+Math.round(sortedScores[i].score*100)+"%</td></tr>";
 		}
 	}
 
 
-    
-    
-    $.ajax ({
-        type: "PUT",
-        url: "/quiz/"+whatQuizToUse,
-        data: JSON.stringify(quiz),
-        contentType: "application/json"
-    });
 
-    $.ajax ({
-        type: "PUT",
-        url: "/scores/"+whatQuizToUse,
-        data: JSON.stringify(sortedScores),
-        contentType: "application/json"
-    });
-        
+
+	$.ajax ({
+		type: "PUT",
+		url: "/quiz/"+whatQuizToUse,
+		data: JSON.stringify(quiz),
+		contentType: "application/json"
+	});
+
+	$.ajax ({
+		type: "PUT",
+		url: "/scores/"+whatQuizToUse,
+		data: JSON.stringify(sortedScores),
+		contentType: "application/json"
+	});
+
 
 	for (var k = 0; k < tags.length; k++) {
 		forLegend += "<div \"key"+k+"\" style=\"width:20px;height:20px;background:"+pieColors[k]+";margin-left:10px\"><label id=\"lkey"+k+"\" class=\"legend\" for=\"key"+k+"\">"+tags[k]+"</label></div><br>"
@@ -252,94 +411,88 @@ function toFinish() {
 	$('#score').text("You got "+numCorrect+" questions right out of "+quizLen+"!");
 
 
-    $finPage.fadeIn(200);
+	$finPage.fadeIn(200);
 
 }
 
 function nameIsThere() {
-	if ($nameIn.val().length > 0) {
-		toQuestions();
-	} else {
-		$('#getName').attr('class', 'has-error');
-		$('#lName').text('You forgot to put in your name!');
+	if (writeState === 0) {
+		if ($nameIn.val().length > 0) {
+			toQuestions();
+		} else {
+			$('#getName').attr('class', 'has-error');
+			$('#lName').text('You forgot to put in your name!');
+		}
+	}
+	else if (writeState === 1) {
+		console.log(readEdit());
+	}
+	else if (writeState === 2) {
+
+	}
+	else if (writeState === 3) {
+
 	}
 }
 
 function toQuestions() {
-    $.getJSON('/quiz/'+whatQuizToUse)
-    .done( function(data) {  
-        quiz = data;
-        console.log(quiz);
 
-        $.getJSON('/scores/'+whatQuizToUse)
-        .done( function(data) {
-        	highscores = data;
-        })
-        .fail( function() {
-        	alert("Failed to load highscores!")
-        });
-        
-        quizLen = quiz.questions.length;
-        for (var i = 0; i < quizLen; i++) {
-            var a = randomInt(0, quiz.questions.length - 1);
-            while (questChosen === true && questsToUse.length !== 0) {
-                for (var j = 0; j < questsToUse.length; j++) {
-                    if (questsToUse[j] === a) {
-                        a = randomInt(0, quiz.questions.length - 1);
-                        break;
-                    } else if (j === questsToUse.length-1) {
-                        questChosen = false;
-                    }
-                }
-            } 
-            questsToUse.push(a);
-            console.log(questsToUse[i]);
-            questChosen = true;
-            pageAnswered.push(false);
-            answCorrect.push(false);
-        }
 
-        $('#quizTitle').text("Welcome to the \""+quiz.title+"\"");
-        $('#quizDes').text(quiz.description);
+	quizLen = quiz.questions.length;
+	for (var i = 0; i < quizLen; i++) {
+		var a = randomInt(0, quiz.questions.length - 1);
+		while (questChosen === true && questsToUse.length !== 0) {
+			for (var j = 0; j < questsToUse.length; j++) {
+				if (questsToUse[j] === a) {
+					a = randomInt(0, quiz.questions.length - 1);
+					break;
+				} else if (j === questsToUse.length-1) {
+					questChosen = false;
+				}
+			}
+		} 
+		questsToUse.push(a);
+		console.log(questsToUse[i]);
+		questChosen = true;
+		pageAnswered.push(false);
+		answCorrect.push(false);
+	}
 
-        $loginPage.hide();
+	$('#quizTitle').text("Welcome to the \""+quiz.title+"\"");
+	$('#quizDes').text(quiz.description);
 
-        userName = $nameIn.val();
-        $('#nameTitle').text('Hey ' + userName + '!');
-        $('#quest').text(quiz.questions[questsToUse[0]].text);
+	$loginPage.hide();
 
-        currentPage = 0;
-        getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
+	userName = $nameIn.val();
+	$('#nameTitle').text('Hey ' + userName + '!');
+	$('#quest').text(quiz.questions[questsToUse[0]].text);
 
-        var radioHTML = "";
+	currentPage = 0;
+	getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
 
-        for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-            radioHTML += "<input type=\"radio\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
-        }
+	var radioHTML = "";
 
-        $('#getAnswer').html(radioHTML);
+	for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
+		radioHTML += "<input type=\"radio\" class=\"rad\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
+	}
 
-        for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-            $('#lr'+i).text(quiz.questions[questsToUse[currentPage]].answers[i])
-        }
+	$('#getAnswer').html(radioHTML);
 
-        $('input[name="answer"]').prop('checked', false);
-        if (pageAnswered[currentPage]) {
-            for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-                if (i === answChoice[currentPage]) {
-                    $('#r'+i).prop('checked', true);
-                    break;
-                }
-            }
-        }
-        $('#top').text(quiz.title);
-        $questPage.fadeIn(200);
-    }).fail( function() {
-     alert("Quiz JSON file not found");   
-    });
-    
-    
-    
+	for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
+		$('#lr'+i).text(quiz.questions[questsToUse[currentPage]].answers[i])
+	}
+
+	$('input[name="answer"]').prop('checked', false);
+	if (pageAnswered[currentPage]) {
+		for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
+			if (i === answChoice[currentPage]) {
+				$('#r'+i).prop('checked', true);
+				break;
+			}
+		}
+	}
+	$('#top').text(quiz.title);
+	$questPage.fadeIn(200);
 
 }  
 
@@ -350,46 +503,66 @@ function toLogin() {
 
 
 function getImg(tag) {
-    
-    var imgObj;
-    
-    console.log(tag);
-    
-    $.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1d9714e46278a986d2bb40bc40baf11c&tags="+tag+"&tag_mode=all&privacy_filter=1&per_page=50&format=json&nojsoncallback=1").done( function(data) {
-        
-    imgObj = data;
-    console.log(imgObj);
-        
-    var choice = randomInt(0, imgObj.photos.photo.length-1);
-	console.log(choice);
 
-    nSrc = "https://farm"+imgObj.photos.photo[choice].farm+".staticflickr.com/"+imgObj.photos.photo[choice].server+"/"+imgObj.photos.photo[choice].id+"_"+imgObj.photos.photo[choice].secret+"_z.jpg"
-    
-    console.log(nSrc);
-    
-    $('#flickImg').attr('src', nSrc); 
-        
-    });
+	var imgObj;
+
+	console.log(tag);
+
+	$.getJSON("https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=1d9714e46278a986d2bb40bc40baf11c&tags="+tag+"&tag_mode=all&privacy_filter=1&per_page=50&format=json&nojsoncallback=1").done( function(data) {
+
+		imgObj = data;
+		console.log(imgObj);
+
+		var choice = randomInt(0, imgObj.photos.photo.length-1);
+		console.log(choice);
+
+		nSrc = "https://farm"+imgObj.photos.photo[choice].farm+".staticflickr.com/"+imgObj.photos.photo[choice].server+"/"+imgObj.photos.photo[choice].id+"_"+imgObj.photos.photo[choice].secret+"_z.jpg"
+
+		console.log(nSrc);
+
+		$('#flickImg').attr('src', nSrc); 
+
+	});
 }
 
 
 function quizCreate() {
-    
+	writeState = 1;
+	clenseEdit();
+	$('#editQuizBlock').fadeIn(150);
+	$('#continue').attr('class', "btn btn-lg btn-info col-lg-2 col-lg-offset-5").attr('value', "Create");
+	$('#titleChoose').fadeOut(150);
+	$('#firstBtn').fadeIn(150);
 }
 
 function quizChoose() {
-    $('#dropDownName').text('Pick a quiz to use!');
-    $('#titleChoose').fadeIn(150);
+	writeState = 0;
+	clenseEdit();
+	$('#editQuizBlock').fadeOut(150);
+	$('#dropDownName').text('Pick a quiz to use!');
+	$('#continue').attr('class', "btn btn-lg btn-default col-lg-2 col-lg-offset-5").attr('value', "Continue");
+	$('#titleChoose').fadeIn(150);
+	$('#firstBtn').fadeOut(150);
 }
 
 function quizEdit() {
-    $('#dropDownName').text('Pick a quiz to edit!');
-    $('#titleChoose').fadeIn(150);
+	writeState = 3;
+	clenseEdit();
+	$('#editQuizBlock').fadeIn(150);
+	$('#dropDownName').text('Pick a quiz to edit!');
+	$('#continue').attr('class', "btn btn-lg btn-warning col-lg-2 col-lg-offset-5").attr('value', "Edit");
+	$('#titleChoose').fadeIn(150);
+	$('#firstBtn').fadeOut(150);
 }
 
 function quizDelete() {
-    $('#dropDownName').text('Pick a quiz to delete!');
-    $('#titleChoose').fadeIn(150);
+	writeState = 2;
+	clenseEdit();
+	$('#editQuizBlock').fadeOut(150);
+	$('#dropDownName').text('Pick a quiz to delete!');
+	$('#continue').attr('class', "btn btn-lg btn-danger col-lg-2 col-lg-offset-5").attr('value', "Delete");
+	$('#titleChoose').fadeIn(150);
+	$('#firstBtn').fadeOut(150);
 }
 
 
@@ -403,40 +576,59 @@ $finPage.hide();
 $('#back').hide();
 $('#titleChoose').hide();
 $('#firstBtn').hide();
+$('#editQuizBlock').hide();
 
 
 $('#doWithQuiz').on('click', function(e) {
-    if ($('#opt0').is(':checked')) {   
-        quizChoose();
-    } else if ($('#opt1').is(':checked')) {   
-        quizCreate(); 
-    } else if ($('#opt2').is(':checked')) {   
-        quizDelete(); 
-    }else if ($('#opt3').is(':checked')) {   
-        quizEdit();    
-    }
+	if ($('#opt0').is(':checked')) {   
+		quizChoose();
+	} else if ($('#opt1').is(':checked')) {   
+		quizCreate(); 
+	} else if ($('#opt2').is(':checked')) {   
+		quizDelete(); 
+	}else if ($('#opt3').is(':checked')) {   
+		quizEdit();    
+	}
 });
 
 $('#continue').on('click', nameIsThere);
 
 $('#getName').on('submit', function(e) {
 	e.preventDefault();
-    nameIsThere();
 });
 $('#getAnswer').on('click', function() {
 	pageAnswered[currentPage] = false;
 });
 
 $('.dropdown-menu li').on('click', function() {
-    whatQuizToUse = this.id;
-    var newText = $('#'+this.id).children('a').text();
-    $('#dropDownName').text(newText);
-    $('#firstBtn').fadeIn(150);
+	whatQuizToUse = this.id;
+
+	$.getJSON('/quiz/'+whatQuizToUse)
+	.done( function(data) {  
+		quiz = data;
+		console.log(quiz);
+
+		$.getJSON('/scores/'+whatQuizToUse)
+		.done( function(data) {
+			highscores = data;
+		})
+		.fail( function() {
+			alert("Failed to load highscores!")
+		});
+
+		var newText = $('#'+whatQuizToUse).children('a').text();
+		$('#dropDownName').text(newText);
+		clenseEdit();
+		populateEdit(quiz);
+		$('#firstBtn').fadeIn(150);
+	}).fail( function() {
+		alert("Quiz JSON file not found");   
+	});
 });
 
 $('#forward').on('click', function() {
-	
-	
+
+
 
 	if (pageAnswered[currentPage] === false) {
 		for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
@@ -455,27 +647,27 @@ $('#forward').on('click', function() {
 	}
 
 	if (currentPage === questsToUse.length - 1) {
-				fadeAgain = false;
-			}
+		fadeAgain = false;
+	}
 
 	if (okToGo) {
 		$questPage.fadeOut(200);
 		setTimeout(function(){
 			$('#lForward').text('');
-            
+
 
 			currentPage++;
 
 			if (currentPage === questsToUse.length) {
 				toFinish();
 			} else {
-            	getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
+				getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
 			}	
 
 			var radioHTML = "";
 
 			for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-				radioHTML += "<input type=\"radio\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
+				radioHTML += "<input type=\"radio\" class=\"rad\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
 			}
 
 			$('#getAnswer').html(radioHTML);
@@ -545,11 +737,11 @@ $('#back').on('click', function() {
 	setTimeout(function(){
 
 		currentPage--;
-        getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
+		getImg("\""+quiz.questions[questsToUse[currentPage]].meta_tags[0]+"\",\""+quiz.meta_tags[0]+"\",-\"lego\",-\"legos\"");
 		var radioHTML = "";
 
 		for (var i = 0; i < quiz.questions[questsToUse[currentPage]].answers.length; i++) {
-			radioHTML += "<input type=\"radio\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
+			radioHTML += "<input type=\"radio\" class=\"rad\" id=\"r"+i+"\" name=\"answer\"><label id=\"lr"+i+"\" for=\"r"+i+"\"></label><br>";
 		}
 
 		$('#getAnswer').html(radioHTML);
@@ -582,5 +774,5 @@ $('#back').on('click', function() {
 
 	}, 200);
 
-	$questPage.fadeIn(200);
+$questPage.fadeIn(200);
 })

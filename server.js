@@ -51,5 +51,14 @@ app.put('/scores/:id', function (req, res) {
     res.send("Yay!!!");
 });
 
+app.put('/createQuiz', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+    var scoreJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+    scoreJSON.push(JSON.parse("[]"));
+    questJSON.push(req.body);
+    fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
+    res.send("Yay!!!");
+});
+
 
 app.listen(process.env.PORT || 5000);

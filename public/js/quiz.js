@@ -416,7 +416,7 @@ function toFinish() {
 }
 
 function nameIsThere() {
-	if (writeState === 0) {
+	if (writeState === 0) {//choose
 		if ($nameIn.val().length > 0) {
 			toQuestions();
 		} else {
@@ -424,14 +424,29 @@ function nameIsThere() {
 			$('#lName').text('You forgot to put in your name!');
 		}
 	}
-	else if (writeState === 1) {
+	else if (writeState === 1) {//create
 		console.log(readEdit());
+		$.ajax ({
+			type: "PUT",
+			url: "/createQuiz",
+			data: JSON.stringify(readEdit()),
+			contentType: "application/json",
+			complete: function() {
+				window.location.replace("/");
+			}
+		});
 	}
-	else if (writeState === 2) {
+	else if (writeState === 2) {//delete
 
 	}
-	else if (writeState === 3) {
-
+	else if (writeState === 3) {//edit
+		console.log(readEdit());
+		$.ajax ({
+			type: "PUT",
+			url: "/editQuiz/"+whatQuizToUse,
+			data: JSON.stringify(readEdit()),
+			contentType: "application/json"
+		});
 	}
 }
 

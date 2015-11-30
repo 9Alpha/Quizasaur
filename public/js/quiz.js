@@ -82,7 +82,7 @@ $('#editQuizFlow_quests').on('click', function(e) {
 
 function addAns(value, id) {
 	var toAdd = "";
-	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-1 radio\"><input type=\"radio\" id=\"editQuizFlow_quests0_ans0_correct\" name=\"quest0_ans\"></div><div class=\"col-sm-6\"><textarea id=\"ansSpot"+editQuests[id][0]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Answer......\">"+value+"</textarea></div></div></li>"
+	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-1 radio\"><input type=\"radio\" id=\"editQuizFlow_quests0_ans0_correct\" name=\"quest0_ans\"></div><div class=\"col-sm-6\"><textarea id=\"ansSpot"+id+editQuests[id][0]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Answer......\">"+value+"</textarea></div></div></li>"
 	editQuests[id][0]++;
 	$('#editQuizFlow_quests').children().find('#listNoDots'+id).append(toAdd);
 }
@@ -94,7 +94,7 @@ function delAns(id) {
 
 function addTag(value, id) {
 	var toAdd = "";
-	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-6\"><textarea id=\"tagSpot"+editQuests[id][1]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Meta Tag...\">"+value+"</textarea></div></div></li>"
+	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-6\"><textarea id=\"tagSpot"+id+editQuests[id][1]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Meta Tag...\">"+value+"</textarea></div></div></li>"
 	editQuests[id][1]++;
 	$('#editQuizFlow_quests').children().find('#listNo'+id).append(toAdd);
 }
@@ -168,10 +168,10 @@ function readEdit() {
 		temp.questions[i].text = $('#textSpot'+i).val();
 		temp.questions[i].correct_answer = $('#editQuizFlow_quest_ans_correct'+i).val();
 		for (var j = 0; j < editQuests[i][0]; j++){
-			temp.questions[i].answers[j] = $('#ansSpot'+j).val();
+			temp.questions[i].answers[j] = $('#ansSpot'+i+j).val();
 		}
 		for (var j = 0; j < editQuests[i][1]; j++){
-			temp.questions[i].meta_tags[j] = $('#tagSpot'+j).val();
+			temp.questions[i].meta_tags[j] = $('#tagSpot'+i+j).val();
 		}
 	}
 	return temp;
@@ -425,7 +425,6 @@ function nameIsThere() {
 		}
 	}
 	else if (writeState === 1) {//create
-		console.log(readEdit());
 		$.ajax ({
 			type: "PUT",
 			url: "/createQuiz",
@@ -437,15 +436,25 @@ function nameIsThere() {
 		});
 	}
 	else if (writeState === 2) {//delete
-
+		$.ajax ({
+			type: "PUT",
+			url: "/deleteQuiz/"+whatQuizToUse,
+			data: JSON.stringify(readEdit()),
+			contentType: "application/json",
+			complete: function() {
+				window.location.replace("/");
+			}
+		});
 	}
 	else if (writeState === 3) {//edit
-		console.log(readEdit());
 		$.ajax ({
 			type: "PUT",
 			url: "/editQuiz/"+whatQuizToUse,
 			data: JSON.stringify(readEdit()),
-			contentType: "application/json"
+			contentType: "application/json",
+			complete: function() {
+				window.location.replace("/");
+			}
 		});
 	}
 }
@@ -628,7 +637,7 @@ $('.dropdown-menu li').on('click', function() {
 			highscores = data;
 		})
 		.fail( function() {
-			alert("Failed to load highscores!")
+			//alert("Failed to load highscores!")
 		});
 
 		var newText = $('#'+whatQuizToUse).children('a').text();

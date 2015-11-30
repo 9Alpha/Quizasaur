@@ -60,5 +60,19 @@ app.put('/createQuiz', function (req, res) {
     res.send("Yay!!!");
 });
 
+app.put('/editQuiz/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+    questJSON[req.params.id] = req.body;
+    fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
+    res.send("Yay!!!");
+});
+
+app.put('/deleteQuiz/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+    questJSON.splice(req.params.id, 1);
+    fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
+    res.send("Yay!!!");
+});
+
 
 app.listen(process.env.PORT || 5000);

@@ -18,6 +18,7 @@ var editQuests = [];
 var editGlobalTags = 0;
 var editGo = false;
 var writeState = 5; //0=choose 1=create 2=delete 3=edit
+var totalQuizNum = 0;
 
 function randomInt(min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -49,7 +50,7 @@ $('#editQuizFlow_quests_add').on('click', function(e) {
 
 function addQuest(value) {
 	var toAdd = "";
-	toAdd += "<div><li><div class=\"form-group\"><div class=\"col-sm-8\"><textarea id=\"textSpot"+editQuests.length+"\" rows=\"1\" class=\"form-control\" placeholder=\"Question Text...\">"+value+"</textarea></div></div></li><br><br><li><ul class=\"listNoDots\" id=\"listNoDots"+editQuests.length+"\"></ul><input mode=\"addA\" type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-info\" value=\"Add Answer\"><input mode=\"delA\"type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-danger\" value=\"Delete Answer\"></li><li><ul class=\"listNoDots\" id=\"listNo"+editQuests.length+"\"></ul><input mode=\"addT\" type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-info\" value=\"Add Meta Tag\"><input mode=\"delT\"type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-danger\" value=\"Delete Meta Tag\"></li><li><div class=\"col-sm-4\"><textarea id=\"editQuizFlow_quest_ans_correct"+editQuests.length+"\" class=\"form-control\" rows=\"1\" placeholder=\"Correct Answer...\"></textarea></div></li></div><br><br>";
+	toAdd += "<div><li><h4>Question "+(editQuests.length+1)+"</h4><div class=\"form-group\"><div class=\"col-sm-8\"><textarea id=\"textSpot"+editQuests.length+"\" rows=\"1\" class=\"form-control\" placeholder=\"Question Text...\">"+value+"</textarea></div></div></li><br><br><li><h4>Answers</h4><ul class=\"listNoDots\" id=\"listNoDots"+editQuests.length+"\"></ul><input mode=\"addA\" type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-info\" value=\"Add Answer\"><input mode=\"delA\"type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-danger\" value=\"Delete Answer\"></li><li><h4>Tags</h4><ul class=\"listNoDots\" id=\"listNo"+editQuests.length+"\"></ul><input mode=\"addT\" type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-info\" value=\"Add Meta Tag\"><input mode=\"delT\"type=\"button\" id=\""+editQuests.length+"\" class=\"btn-sm btn-danger\" value=\"Delete Meta Tag\"></li><li><h4>Correct Answer</h4><div class=\"col-sm-4\"><textarea id=\"editQuizFlow_quest_ans_correct"+editQuests.length+"\" class=\"form-control\" rows=\"1\" placeholder=\"Correct Answer...\"></textarea></div></li></div><br><br>";
 	editQuests.push([0, 0]);
 	$('#editQuizFlow_quests').append(toAdd);
 }
@@ -82,7 +83,7 @@ $('#editQuizFlow_quests').on('click', function(e) {
 
 function addAns(value, id) {
 	var toAdd = "";
-	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-1 radio\"><input type=\"radio\" id=\"editQuizFlow_quests0_ans0_correct\" name=\"quest0_ans\"></div><div class=\"col-sm-6\"><textarea id=\"ansSpot"+id+editQuests[id][0]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Answer......\">"+value+"</textarea></div></div></li>"
+	toAdd += "<li><div class=\"form-group\"><div class=\"col-sm-6\"><textarea id=\"ansSpot"+id+editQuests[id][0]+"\" rows=\"1\" class=\"form-control\" placeholder=\"Answer......\">"+value+"</textarea></div></div></li>"
 	editQuests[id][0]++;
 	$('#editQuizFlow_quests').children().find('#listNoDots'+id).append(toAdd);
 }
@@ -144,6 +145,7 @@ function populateEdit(quizUp) {
 function readEdit() {
 	var temp = {
 		"title": "",
+		"id": totalQuizNum,
 		"description": "",
 		"difficulty": "",
 		"meta_tags": [],
@@ -426,8 +428,8 @@ function nameIsThere() {
 	}
 	else if (writeState === 1) {//create
 		$.ajax ({
-			type: "PUT",
-			url: "/createQuiz",
+			type: "POST",
+			url: "/quiz",
 			data: JSON.stringify(readEdit()),
 			contentType: "application/json",
 			complete: function() {
@@ -437,8 +439,8 @@ function nameIsThere() {
 	}
 	else if (writeState === 2) {//delete
 		$.ajax ({
-			type: "PUT",
-			url: "/deleteQuiz/"+whatQuizToUse,
+			type: "DELETE",
+			url: "/quiz/"+whatQuizToUse,
 			data: JSON.stringify(readEdit()),
 			contentType: "application/json",
 			complete: function() {
@@ -449,7 +451,7 @@ function nameIsThere() {
 	else if (writeState === 3) {//edit
 		$.ajax ({
 			type: "PUT",
-			url: "/editQuiz/"+whatQuizToUse,
+			url: "/quiz/"+whatQuizToUse,
 			data: JSON.stringify(readEdit()),
 			contentType: "application/json",
 			complete: function() {
@@ -604,6 +606,7 @@ $('#editQuizBlock').hide();
 
 
 $('#doWithQuiz').on('click', function(e) {
+	totalQuizNum = $('.dropdown-menu').find('li').length;
 	if ($('#opt0').is(':checked')) {   
 		quizChoose();
 	} else if ($('#opt1').is(':checked')) {   

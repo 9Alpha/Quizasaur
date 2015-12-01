@@ -39,19 +39,7 @@ app.put('/quiz/:id', function (req, res) {
     res.send("Yay!!!");
 });
 
-app.get('/scores/:id', function (req, res) {
-    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
-	res.send(questJSON[req.params.id]);
-});
-
-app.put('/scores/:id', function (req, res) {
-    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
-    questJSON[req.params.id] = req.body;
-    fs.writeFileSync("data/highscores.json", JSON.stringify(questJSON));
-    res.send("Yay!!!");
-});
-
-app.put('/createQuiz', function (req, res) {
+app.post('/quiz', function (req, res) {
     var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
     var scoreJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
     scoreJSON.push(JSON.parse("[]"));
@@ -60,19 +48,25 @@ app.put('/createQuiz', function (req, res) {
     res.send("Yay!!!");
 });
 
-app.put('/editQuiz/:id', function (req, res) {
+app.delete('/quiz/:id', function (req, res) {
     var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
-    questJSON[req.params.id] = req.body;
-    fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
-    res.send("Yay!!!");
-});
-
-app.put('/deleteQuiz/:id', function (req, res) {
-    var questJSON = JSON.parse(fs.readFileSync("data/allQuizes.json"));
+    var scoreJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
     questJSON.splice(req.params.id, 1);
+    scoreJSON.splice(req.params.id, 1);
     fs.writeFileSync("data/allQuizes.json", JSON.stringify(questJSON));
     res.send("Yay!!!");
 });
 
+app.get('/scores/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+    res.send(questJSON[req.params.id]);
+});
+
+app.put('/scores/:id', function (req, res) {
+    var questJSON = JSON.parse(fs.readFileSync("data/highscores.json"));
+    questJSON[req.params.id] = req.body;
+    fs.writeFileSync("data/highscores.json", JSON.stringify(questJSON));
+    res.send("Yay!!!");
+});
 
 app.listen(process.env.PORT || 5000);
